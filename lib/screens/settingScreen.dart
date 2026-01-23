@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scrollkill/components/appLists.dart';
+import 'package:scrollkill/screens/appSchedulesScreen.dart';
+import 'package:scrollkill/screens/goalsScreen.dart';
 import 'package:scrollkill/screens/scheduleScreen.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -31,10 +33,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ScheduleScreen()));
                   },),
                   ListTile(leading: Icon(Icons.schedule),title: Text("App Schedules"),onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ScheduleScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx)=>AppScheduleScreen()));
                   },),
-                  ListTile(leading: Icon(Icons.wine_bar_rounded),title: Text("Goals"),),
-                  ListTile(leading: Icon(Icons.leaderboard),title: Text("Stat"),),
+                  ListTile(leading: Icon(Icons.track_changes),title: Text("Goals"),onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx)=>GoalsScreen()));
+                  },),
+                  ListTile(leading: Icon(Icons.analytics),title: Text("Analytics"),),
 
                   ListTile(leading: Icon(Icons.money),title: Text("Support"),),
                   ListTile(leading: Icon(Icons.reviews),title: Text("Review"),),

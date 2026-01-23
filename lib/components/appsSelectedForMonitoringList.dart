@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollkill/components/contentCard.dart';
-import 'package:scrollkill/functions/getApps.dart';
 import 'package:scrollkill/models/monitoringApp.dart';
 import 'package:scrollkill/states/settingState.dart';
 

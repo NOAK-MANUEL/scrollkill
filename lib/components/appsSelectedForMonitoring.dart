@@ -44,7 +44,7 @@ class _AppsSelectedForMonitoringState extends State<AppsSelectedForMonitoring> {
                     setState(() {
                       blockScreen = value;
                     });
-                  }, title: Text("Block Screen"), subtitle: Text("Set a default setting for all apps and block screen when timer reached to avoid destractions"),),
+                  }, title: Text("Block Screen"), subtitle: Text("Set a default setting for all apps and block screen when timer reached to avoid distractions"),),
                   SwitchListTile(value: trackScreen, onChanged: (value){
                     setState(() {
                       trackScreen = value;
