@@ -16,12 +16,25 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   Future<List<UserSchedule>> getSchedules() async {
     final prefs = await SharedPreferences.getInstance();
+    prefs.remove("userSchedules");
     final data = prefs.getStringList("userSchedules");
 
     if (data == null) return [];
 
-    return data.map((info) => UserSchedule.fromJson(jsonDecode(info))).toList();
+    final List<UserSchedule> schedules = [];
+
+    for (final info in data) {
+      try {
+        final decoded = jsonDecode(info);
+        schedules.add(UserSchedule.fromJson(decoded));
+      } catch (e) {
+        debugPrint("Invalid schedule skipped: $info");
+      }
+    }
+
+    return schedules;
   }
+
 
   Future<void> saveData(List<UserSchedule> userData) async {
     final prefs = await SharedPreferences.getInstance();
@@ -70,10 +83,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return value[0].toUpperCase() + value.substring(1);
   }
 
+  Future<void> _loadSchedules() async {
+    final data = await getSchedules();
+    setState(() {
+      userSchedules..clear()..addAll(data);
+    });
+  }
   @override
   void initState() {
     super.initState();
-    getSchedules().then((data) => userSchedules.addAll(data));
+    _loadSchedules();
   }
 
   @override
