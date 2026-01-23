@@ -89,7 +89,7 @@ class _NewScheduleState extends State<NewSchedule> {
     setState(() {
       selectedDays.contains(index)
           ? selectedDays.remove(index)
-          : selectedDays.insert(index,index);
+          : selectedDays.add(index);
     });
   }
 

@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:scrollkill/components/customPopupModel.dart';
 
 class CardPlan extends StatelessWidget {
-  const CardPlan({super.key,required this.currentSchedule, required this.wrapper, required this.editSchedule,required this.deleteSchedule});
+  const CardPlan({super.key,required this.currentSchedule, required this.wrapper, required this.deleteSchedule});
   String _capitalize(String value) {
     if (value.isEmpty) return value;
     return value[0].toUpperCase() + value.substring(1);
   }
-  final dynamic wrapper;
+  final Widget Function() wrapper;
   final Future<void> Function(DateTime id) deleteSchedule;
-  final Future<void> editSchedule;
   String getInterval(int period) {
     switch (period) {
       case 0:
@@ -34,11 +33,15 @@ class CardPlan extends StatelessWidget {
 
 
   final dynamic currentSchedule;
+
   @override
   Widget build(BuildContext context) {
+    final sortedPeriods = currentSchedule == null ?[]: List<int>.from(currentSchedule.periods as List<int>)..sort();
+
+
     return Card(
       elevation: 3,
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -50,6 +53,7 @@ class CardPlan extends StatelessWidget {
             /// HEADER
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (currentSchedule.hardFocus)
                   Padding(
@@ -71,7 +75,7 @@ class CardPlan extends StatelessWidget {
                   ),
                 ),
 
-                CustomPopupModel(wrapper: wrapper, currentSchedule: currentSchedule, editSchedule: editSchedule, deleteSchedule: deleteSchedule)
+                CustomPopupModel(wrapper: wrapper, currentSchedule: currentSchedule, deleteSchedule: deleteSchedule)
               ],
             ),
 
@@ -89,7 +93,7 @@ class CardPlan extends StatelessWidget {
             const SizedBox(height: 12),
 
             /// DATE RANGE
-            if(currentSchedule.startDate)
+            if(currentSchedule.startDate != null)
                 Row(
               children: [
                 Icon(
@@ -112,12 +116,12 @@ class CardPlan extends StatelessWidget {
             ),
 
             /// PERIOD CHIPS
-            if (currentSchedule.periods != null &&  currentSchedule.periods.isNotEmpty) ...[
+            if ((sortedPeriods).isNotEmpty) ...[
               const SizedBox(height: 12),
               Wrap(
                 spacing: 5,
                 runSpacing: 5,
-                children: currentSchedule.periods
+                children: sortedPeriods
                     .map(
                       (period) => Chip(
                     label: Text(getInterval(period)),

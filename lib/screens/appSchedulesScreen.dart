@@ -17,21 +17,21 @@ class AppScheduleScreen extends StatefulWidget {
 }
 
 class _AppScheduleScreenState extends State<AppScheduleScreen> {
-  Future<List<UserSchedule>> getSchedules() async {
+  Future<List<AppSchedule>> getSchedules() async {
     final prefs = await SharedPreferences.getInstance();
-    final data = prefs.getStringList("userSchedules");
+    final data = prefs.getStringList("appSchedules");
 
     if (data == null) return [];
 
-    return data.map((info) => UserSchedule.fromJson(jsonDecode(info))).toList();
+    return data.map((info) => AppSchedule.fromJson(jsonDecode(info))).toList();
   }
 
-  Future<void> saveData(List<UserSchedule> userData) async {
+  Future<void> saveData(List<AppSchedule> userData) async {
     final prefs = await SharedPreferences.getInstance();
     final data = userData.map((data) => jsonEncode(data.toJson())).toList();
-    await prefs.setStringList("userSchedules", data);
+    await prefs.setStringList("appSchedules", data);
     setState(() {});
-  }Future<void> editSchedule(UserSchedule userData) async {
+  }Future<void> editSchedule(AppSchedule userData) async {
     final prefs = await SharedPreferences.getInstance();
     final index = userSchedules.indexWhere((data)=>data.id == userData.id);
     if(index == -1){
@@ -39,13 +39,13 @@ class _AppScheduleScreenState extends State<AppScheduleScreen> {
     }
     userSchedules[index]= userData;
     final data = userSchedules.map((data) => jsonEncode(data.toJson())).toList();
-    await prefs.setStringList("userSchedules", data);
+    await prefs.setStringList("appSchedules", data);
     setState(() {});
   }
 
-  final List<UserSchedule> userSchedules = [];
+  final List<AppSchedule> userSchedules = [];
 
-  Future<void> storeData(UserSchedule userData) async {
+  Future<void> storeData(AppSchedule userData) async {
     userSchedules.add(userData);
     await saveData(userSchedules);
   }
@@ -94,7 +94,7 @@ class _AppScheduleScreenState extends State<AppScheduleScreen> {
                     enableDrag: true,
                     isScrollControlled: true,
                     useSafeArea: true,
-                    builder: (ctx) => NewSchedule(onSave: storeData),
+                    builder: (ctx) => NewAppSchedule(onSave: storeData),
                   );
                 },
                 label: Text("Set a new schedule"),
@@ -109,7 +109,7 @@ class _AppScheduleScreenState extends State<AppScheduleScreen> {
                   itemBuilder: (ctx, index) {
                     final currentSchedule = userSchedules[index];
 
-                    return CardPlan(currentSchedule: currentSchedule, wrapper: NewAppSchedule, deleteSchedule: deleteSchedule, editSchedule: editSchedule(currentSchedule), );
+                    return CardPlan(currentSchedule: currentSchedule, wrapper:()=> NewAppSchedule(onEdit: editSchedule,editContent: currentSchedule,), deleteSchedule: deleteSchedule,  );
                   },
     separatorBuilder: (_, __) => SizedBox(height: 20),
                   itemCount: userSchedules.length,

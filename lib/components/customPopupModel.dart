@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomPopupModel extends StatelessWidget {
-  const CustomPopupModel({super.key, required this.wrapper,required this.currentSchedule, required this.editSchedule , required this.deleteSchedule});
+  const CustomPopupModel({super.key, required this.wrapper,required this.currentSchedule, required this.deleteSchedule});
 
-  final dynamic wrapper;
+  final Widget Function() wrapper;
   final dynamic currentSchedule;
-  final Future<void> editSchedule;
   final Future<void> Function(DateTime id) deleteSchedule;
 
   String _capitalize(String value) {
@@ -23,10 +22,7 @@ class CustomPopupModel extends StatelessWidget {
             context: context,
             isScrollControlled: true,
             useSafeArea: true,
-            builder: (_) => wrapper(
-              editContent: currentSchedule,
-              onEdit: editSchedule,
-            ),
+            builder: (_) => wrapper(),
           );
         } else if (value == "delete") {
           showDialog(

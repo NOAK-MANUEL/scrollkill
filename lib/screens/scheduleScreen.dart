@@ -81,41 +81,25 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("Schedules")),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextButton.icon(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    enableDrag: true,
-                    isScrollControlled: true,
-                    useSafeArea: true,
-                    builder: (ctx) => NewSchedule(onSave: storeData),
-                  );
-                },
-                label: Text("Set a new schedule"),
-                icon: Icon(Icons.add),
-              ),
+        child: ListView.separated(
+          itemBuilder: (ctx, index) {
+            final currentSchedule = userSchedules[index];
 
-              SizedBox(height: 20),
-
-              ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: 600),
-                child: ListView.separated(
-                  itemBuilder: (ctx, index) {
-                    final currentSchedule = userSchedules[index];
-
-                    return CardPlan(currentSchedule: currentSchedule,wrapper: NewSchedule, deleteSchedule: deleteSchedule,editSchedule: editSchedule(currentSchedule),);
-                  },
-                  separatorBuilder: (_, __) => SizedBox(height: 20),
-                  itemCount: userSchedules.length,
-                ),
-              ),
-            ],
-          ),
+            return CardPlan(currentSchedule: currentSchedule,wrapper: ()=>NewSchedule(onEdit: editSchedule,editContent: currentSchedule,), deleteSchedule: deleteSchedule,);
+          },
+          separatorBuilder: (_, __) => SizedBox(height: 10),
+          itemCount: userSchedules.length,
         ),
       ),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        showModalBottomSheet(
+          context: context,
+          enableDrag: true,
+          isScrollControlled: true,
+          useSafeArea: true,
+          builder: (ctx) => NewSchedule(onSave: storeData),
+        );
+      }, child: Icon(Icons.add),),
     );
   }
 }
