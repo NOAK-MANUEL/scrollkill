@@ -16,7 +16,6 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   Future<List<UserSchedule>> getSchedules() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.remove("userSchedules");
     final data = prefs.getStringList("userSchedules");
 
     if (data == null) return [];

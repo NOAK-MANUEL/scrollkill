@@ -5,11 +5,11 @@ enum Intervals { hourly, daily }
 class MonitoringApp {
   MonitoringApp({
     required this.packageName,
-    this.scrollCounts = 100,
+    this.scrollCounts = 20,
     this.restTime = 40,
     this.interval = Intervals.hourly,
     this.focusMode = true,
-    this.screenLimit,
+    this.screenLimit=20,
 
   }):id = DateTime.now();
 
@@ -26,7 +26,7 @@ class MonitoringApp {
   Map<String, dynamic> toJson() => {
     "packageName": packageName,
     "scrollCounts": scrollCounts,
-    "interval": interval,
+    "interval": interval.name,
     "focusMode": focusMode,
     "restTime": restTime,
     "screenLimit": screenLimit,
@@ -38,7 +38,7 @@ class MonitoringApp {
     restTime: json[" restTime"],
     focusMode: json["focusMode"],
     screenLimit: json["screenLimit"],
-    interval: json["interval"],
+    interval: Intervals.values.firstWhere((value)=>value.name == json["interval"]),
   );
 
   void update(String key, dynamic value) {

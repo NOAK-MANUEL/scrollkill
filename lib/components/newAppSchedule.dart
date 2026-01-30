@@ -57,9 +57,9 @@ class _NewAppScheduleState extends State<NewAppSchedule> {
       _descriptionController = TextEditingController(
         text: editContent.description,
       );
-      startTime = editContent.startDate!;
-      endTime = editContent.endDate!;
-      selectedDays.addAll(editContent.periods!);
+      startTime = editContent.startDate;
+      endTime = editContent.endDate;
+      selectedDays.addAll(editContent.periods);
       appAllowed = editContent.app;
 
     }
@@ -83,7 +83,7 @@ class _NewAppScheduleState extends State<NewAppSchedule> {
     setState(() {
       selectedDays.contains(index)
           ? selectedDays.remove(index)
-          : selectedDays.insert(index,index);
+          : selectedDays.add(index);
     });
   }
 
@@ -131,7 +131,7 @@ class _NewAppScheduleState extends State<NewAppSchedule> {
           children: [
             const SizedBox(height: 18),
 
-            sectionTitle("Schedule Info"),
+            sectionTitle("App Schedule Info"),
             sectionCard(
               Column(
                 children: [
@@ -319,17 +319,10 @@ Widget _timePicker({
 }
 
 Widget _appTarget(List<AppInfo> appList, String appTarget) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      sectionTitle("Apps Not Allowed"),
-      const SizedBox(height: 12),
-      ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 500),
-        child: sectionCard(
-          GetInstalledApps(appList: appList, app: appTarget),
-        ),
-      ),
-    ],
+  return ConstrainedBox(
+    constraints: const BoxConstraints(maxHeight: 500),
+    child: sectionCard(
+      GetInstalledApps(appList: appList, app: appTarget),
+    ),
   );
 }

@@ -119,7 +119,7 @@ class _NewGoalState extends State<NewGoal> {
           children: [
             const SizedBox(height: 18),
 
-            sectionTitle("Schedule Info"),
+            sectionTitle("Goal Info"),
             sectionCard(
               Column(
                 children: [
@@ -226,7 +226,7 @@ class _NewGoalState extends State<NewGoal> {
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
-              child: const Text("Save Schedule"),
+              child: const Text("Save Goal"),
             ),
           ],
         ),

@@ -55,7 +55,7 @@ class CardPlan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (currentSchedule.hardFocus)
+                if (currentSchedule.hardFocus != null)
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: Icon(
@@ -134,6 +134,12 @@ class CardPlan extends StatelessWidget {
                 )
                     .toList(),
               ),
+
+              if(currentSchedule.app != null)
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Text(currentSchedule.app),
+                )
             ],
           ],
         ),

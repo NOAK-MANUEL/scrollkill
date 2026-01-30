@@ -9,9 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingProvider extends ChangeNotifier {
   Intervals defaultInterval = Intervals.hourly;
   int screenLimit = 20;
-  int restLimit = 40;
+  int restTime = 40;
   bool blockScreen = false;
   bool trackScreen = true;
+  bool focusMode = true;
   bool _loaded = false;
 
 
@@ -19,6 +20,9 @@ class SettingProvider extends ChangeNotifier {
 
   void changeInterval(Intervals interval) {
     interval = interval;
+    notifyListeners();
+  }void setFocusMode(bool value) {
+    focusMode = value;
     notifyListeners();
   }
 
@@ -28,7 +32,7 @@ class SettingProvider extends ChangeNotifier {
   }
 
   void setRestLimit(int limit) {
-    restLimit = limit;
+    restTime = limit;
     notifyListeners();
   }
 
@@ -63,6 +67,24 @@ class SettingProvider extends ChangeNotifier {
     apps.addAll(apps);
     notifyListeners();
   }
+
+  Map<String,dynamic> toJson()=>{
+    "screenLimit": screenLimit,
+    "restTime":restTime,
+    "focusMode":focusMode,
+    "blockScreen": blockScreen,
+    "trackScreen": trackScreen,
+    "interval" : defaultInterval.name
+  };
+  Future<void> saveSettings(int? restTimeGiven, int? screenLimitGiven)async {
+    if(restTimeGiven != null){
+      restTime = restTimeGiven;
+      screenLimit= screenLimitGiven!;
+    }
+
+    final pref = await SharedPreferences.getInstance();
+    await pref.setString("settings", jsonEncode(toJson()));
+  }
 }
 class AppMonitoredProvider extends ChangeNotifier {
 
@@ -90,7 +112,7 @@ class AppMonitoredProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveApp() async{
+  Future<void> saveApp() async{
     if(appsMonitored.isEmpty){
       return;
     }
@@ -100,6 +122,8 @@ class AppMonitoredProvider extends ChangeNotifier {
     final sedApps = appsMonitored.map((app)=> jsonEncode(app.toJson())).toList();
 
     await pref.setStringList("monitoringApps", sedApps);
+
+
   }
 
 
@@ -109,6 +133,9 @@ class AppMonitoredProvider extends ChangeNotifier {
     }
 
     final pref = await SharedPreferences.getInstance();
+    await pref.remove("monitoringApps");
+    debugPrint("yes");
+
     final data = pref.getStringList("monitoringApps");
 
     if(data == null) return;
@@ -116,8 +143,10 @@ class AppMonitoredProvider extends ChangeNotifier {
 
     final apps= data.map((app)=> MonitoringApp.fromJson(jsonDecode(app))).toList();
     appsMonitored.addAll(apps);
+    debugPrint("yes");
 
     notifyListeners();
+
 
   }
 

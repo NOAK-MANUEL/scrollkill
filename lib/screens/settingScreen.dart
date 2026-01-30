@@ -15,7 +15,9 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Setting Screen"),
+      ),
       drawer: Drawer(
         child: Column(
           children: [
